@@ -1,0 +1,51 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('horizon_jobs', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('queue')->index();
+            $table->longText('payload');
+            $table->unsignedTinyInteger('attempts')->default(0);
+            $table->unsignedInteger('reserved_at')->nullable();
+            $table->unsignedInteger('available_at');
+            $table->unsignedInteger('created_at');
+        });
+
+        Schema::create('horizon_failed_jobs', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('uuid')->unique();
+            $table->text('connection');
+            $table->text('queue');
+            $table->longText('payload');
+            $table->longText('exception');
+            $table->timestamp('failed_at')->useCurrent();
+        });
+
+        Schema::create('horizon_monitoring', function (Blueprint $table) {
+            $table->string('tag');
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
+        });
+
+        Schema::create('horizon_snapshots', function (Blueprint $table) {
+            $table->increments('id');
+            $table->timestamp('created_at');
+            $table->longText('metrics');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('horizon_snapshots');
+        Schema::dropIfExists('horizon_monitoring');
+        Schema::dropIfExists('horizon_failed_jobs');
+        Schema::dropIfExists('horizon_jobs');
+    }
+};
