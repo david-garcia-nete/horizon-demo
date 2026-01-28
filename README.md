@@ -55,4 +55,24 @@
    ./vendor/bin/sail down
    ```
 
-Redis is installed via Sail for future queue and cache usage, but it is not wired into the application yet.
+## Horizon (Redis queues)
+
+1. Start Sail:
+
+   ```bash
+   ./vendor/bin/sail up -d
+   ```
+
+2. Run migrations:
+
+   ```bash
+   ./vendor/bin/sail artisan migrate
+   ```
+
+3. Run Horizon:
+
+   ```bash
+   ./vendor/bin/sail artisan horizon
+   ```
+
+4. Visit `/horizon` in your browser.
