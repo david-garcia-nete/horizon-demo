@@ -75,7 +75,7 @@
    ./vendor/bin/sail artisan horizon
    ```
 
-4. Visit `/horizon` in your browser.
+4. Visit `http://localhost:8080/horizon` in your browser.
 
 ## Demo
 
@@ -85,7 +85,8 @@
    ./vendor/bin/sail artisan demo:burst 500 5 100
    ```
 
-2. Visit the Horizon dashboard to watch pending, running, and completed jobs.
+2. Visit the Horizon dashboard to watch pending, running, and completed jobs
+   on the `inventory` queue.
 
 3. The Redis-backed queue lets multiple workers process jobs in parallel, while Redis locks
    ensure only one job per SKU updates inventory at a time.
