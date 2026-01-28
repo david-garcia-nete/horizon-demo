@@ -28,13 +28,28 @@
    ./vendor/bin/sail up -d
    ```
 
-2. Verify the application:
+2. Ensure the sqlite database file exists:
+
+   ```bash
+   touch database/database.sqlite
+   ```
+
+3. Verify the application:
 
    ```bash
    ./vendor/bin/sail artisan -V
    ```
 
-3. Stop the containers:
+4. Run basic smoke checks:
+
+   ```bash
+   ./vendor/bin/sail artisan migrate
+   ./vendor/bin/sail artisan up
+   ```
+
+   Or visit `/up` in your browser to confirm the application is healthy.
+
+5. Stop the containers:
 
    ```bash
    ./vendor/bin/sail down
