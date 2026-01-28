@@ -9,6 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class SimulateInventoryUpdate implements ShouldQueue
 {
@@ -31,16 +32,25 @@ class SimulateInventoryUpdate implements ShouldQueue
 
     public function handle(): void
     {
-        Cache::lock("inv:sku:{$this->sku}", 10)->block(5, function (): void {
-            $start = microtime(true);
-            usleep($this->workMs * 1000);
-            $elapsedMs = (int) round((microtime(true) - $start) * 1000);
+        try {
+            Cache::lock("inv:sku:{$this->sku}", 10)->block(5, function (): void {
+                $start = microtime(true);
+                usleep($this->workMs * 1000);
+                $elapsedMs = (int) round((microtime(true) - $start) * 1000);
 
-            Log::info('Simulated inventory update', [
+                Log::info('Simulated inventory update', [
+                    'sku' => $this->sku,
+                    'work_ms' => $this->workMs,
+                    'elapsed_ms' => $elapsedMs,
+                ]);
+            });
+        } catch (Throwable $exception) {
+            Log::warning('Failed to acquire inventory lock', [
                 'sku' => $this->sku,
-                'work_ms' => $this->workMs,
-                'elapsed_ms' => $elapsedMs,
+                'exception' => $exception,
             ]);
-        });
+
+            throw $exception;
+        }
     }
 }
