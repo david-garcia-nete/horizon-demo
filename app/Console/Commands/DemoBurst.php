@@ -23,7 +23,7 @@ class DemoBurst extends Command
 
         for ($i = 0; $i < $count; $i++) {
             $sku = $skuList[$i % $skus];
-            SimulateInventoryUpdate::dispatch($sku, $workMs);
+            SimulateInventoryUpdate::dispatch($sku, $workMs)->onQueue('inventory');
         }
 
         $this->info("Dispatched {$count} jobs across {$skus} SKUs with {$workMs}ms work each.");

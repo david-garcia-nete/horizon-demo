@@ -20,7 +20,6 @@ class SimulateInventoryUpdate implements ShouldQueue
 
     public $timeout = 60;
     public $tries = 1;
-    public $queue = 'inventory';
 
     public string $sku;
     public int $workMs;
